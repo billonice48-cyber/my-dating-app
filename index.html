@@ -41,12 +41,34 @@
             renderProfile();
         };
 
-        // Mock profiles for testing
-        const mockProfiles = [
-            { uid: 'mock1', name: 'Jessica', age: 24, bio: 'Coffee lover and explorer ☕', image: 'https://picsum.photos/300/400?random=1' },
-            { uid: 'mock2', name: 'David', age: 27, bio: 'Musician and dog dad 🎸', image: 'https://picsum.photos/300/400?random=2' }
-        ];
-        profiles = profiles.concat(mockProfiles);
+       // Fetch real profiles from Firestore
+async function loadProfilesFromFirestore() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        profiles = [];
+        
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (doc.id !== currentUser?.uid) {
+                profiles.push({
+                    uid: doc.id,
+                    name: data.name || 'Anonymous',
+                    age: data.age || 'N/A',
+                    bio: data.bio || 'No bio yet',
+                    image: data.image || 'https://picsum.photos/300/400?random=1'
+                });
+            }
+        });
+
+        currentIndex = 0;
+        renderProfile();
+    } catch (error) {
+        console.error("Error loading profiles: ", error);
+        document.getElementById('card-box').innerHTML = '<h2>Error loading profiles</h2>';
+    }
+}
+
+loadProfilesFromFirestore();
         renderProfile();
     </script>
 </body>
