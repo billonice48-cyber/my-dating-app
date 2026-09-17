@@ -223,5 +223,12 @@
       renderProfile();
     };
   </script>
+// Mock profiles for testing
+const mockProfiles = [
+  { uid: 'mock1', name: 'Jessica', age: 24, bio: 'Coffee lover and explorer ☕', image: 'https://picsum.photos/300/400?random=1' },
+  { uid: 'mock2', name: 'David', age: 27, bio: 'Musician and dog dad 🎸', image: 'https://picsum.photos/300/400?random=2' }
+];
+profiles = (typeof profiles !== 'undefined' ? profiles : []).concat(mockProfiles);
+renderProfile();  
 </body>
 </html>
